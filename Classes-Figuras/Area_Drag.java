@@ -7,7 +7,6 @@ public class RectApp {
     }
 }
 class Rect {
-    int dx, dy;
     int a;
     int x, y;
     int w, h;
@@ -22,14 +21,12 @@ class Rect {
 	return this.a;
     }
     void drag (int dx, int dy) {
-	this.dx = dx;
-	this.dy = dy;
-	this.x = this.x + this.dx;
-	this.y = this.y + this.dy;
+	this.x = this.x + dx;
+	this.y = this.y + dy;
     }
     void print () {
-        System.out.format("Retangulo de tamanho (%d,%d) e area (%d) na posicao (%d,%d), foi movido (%d,%d) unidades.\n",
-            this.w, this.h, this.a, this.x, this.y, this.dx, this.dy);
+        System.out.format("Retangulo de tamanho (%d,%d) e area (%d), movido para posicao (%d,%d).\n",
+            this.w, this.h, this.a, this.x, this.y);
     }
     
 }
