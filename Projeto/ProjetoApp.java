@@ -7,20 +7,20 @@ import java.util.Iterator;
 
 import figures.*;
 
-class ListApp {
+class ProjetoApp {
     public static void main (String[] args) {
-        ListFrame frame = new ListFrame();
+        ProjetoFrame frame = new ProjetoFrame();
         frame.setVisible(true);
     }
 }
 
-class ListFrame extends JFrame {
+class ProjetoFrame extends JFrame {
     ArrayList<Figure> figs = new ArrayList<Figure>();
     Iterator<Figure> obj = figs.iterator();
     public Figure focus = null;
     Random rand = new Random();
 
-    ListFrame () {
+    ProjetoFrame () {
         this.addWindowListener (
             new WindowAdapter() {
                 public void windowClosing (WindowEvent e) {
