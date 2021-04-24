@@ -13,5 +13,6 @@ public abstract class Figure {
     public abstract boolean contains(MouseEvent evt);
     public abstract void drag(int dx, int dy);
     public abstract void redimension(int d);
+    public abstract void InFocus (Graphics g);
     
 }
