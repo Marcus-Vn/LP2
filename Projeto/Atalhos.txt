@@ -1,0 +1,15 @@
+Atalhos do teclado:
+
+"r" - Retângulo
+"e" - Elipse
+"t" - Triângulo
+"s" - Seta
+"del" - Deletar figura em foco
+"+" - Aumentar o tamanho
+"-" - Diminuir o tamanho
+setas - Movimentar figura
+
+Mouse:
+
+Clique esquerdo - Colocar figura em foco e movimentar
+Clique direito - Mudar cor de fundo ou contorno
