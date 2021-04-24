@@ -7,6 +7,7 @@ import java.awt.event.*;
 public class Ellipse extends Figure{
 
     Ellipse2D Ellipse;
+    Ellipse2D foco;
 
     public Ellipse (int x, int y, int w, int h, Color ol, Color bgd) {
         this.x = x;
@@ -45,5 +46,12 @@ public class Ellipse extends Figure{
 	this.w += d;
 	this.h += d;
 	this.Ellipse = new Ellipse2D.Double(this.x,this.y,this.w,this.h);
+    }
+
+    public void InFocus(Graphics g){
+	Graphics2D focusline = (Graphics2D) g;
+	this.foco = new Ellipse2D.Double(this.x-3,this.y-3,this.w+6,this.h+6);
+	focusline.setColor(Color.red); 
+	focusline.draw(this.foco);	
     }
 }
