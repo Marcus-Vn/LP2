@@ -62,7 +62,6 @@ public class Seta extends Figure {
 		this.p += d;
 		this.l += d;
 	}
-
     }
 	
     public void InFocus(Graphics g){
