@@ -2,7 +2,6 @@ package figures;
 
 import java.awt.*;
 import java.awt.Polygon;
-import java.awt.Shape;
 import java.awt.event.*;
 
 public class Triangle extends Figure {
