@@ -7,7 +7,7 @@ import java.util.Iterator;
 
 import figures.*;
 
-class ProjetoApp {
+class EditorApp {
     public static void main (String[] args) {
         ProjetoFrame frame = new ProjetoFrame();
         frame.setVisible(true);	
@@ -36,13 +36,17 @@ class ProjetoFrame extends JFrame{
             }
         );
    	
-	this.setTitle("Figuras");
+	this.setTitle("Editor Grafico");
         this.setSize(600, 500);
     
 	this.addMouseListener(new MouseAdapter(){
 		public void mousePressed (MouseEvent evt){
 			start = evt.getPoint();
 			focus = null;
+			if(getMousePosition() == null){
+				return;
+			}
+				
 			if(SwingUtilities.isLeftMouseButton(evt)){
 				for(Figure fig: figs){
 					if(fig.contains(evt)){
@@ -123,7 +127,8 @@ class ProjetoFrame extends JFrame{
 					mudarCor.setVisible(false);
 					Bview = false;
 					cont -= 1;
-			}	
+			}
+				
 		}
 	});
 
@@ -145,39 +150,42 @@ class ProjetoFrame extends JFrame{
 	this.addKeyListener (
 	   new KeyAdapter(){
 	      public void keyPressed (KeyEvent evt){
-		      int x = MouseInfo.getPointerInfo().getLocation().x;
-                      int y = MouseInfo.getPointerInfo().getLocation().y;
-                      int w = 50;
-                      int h = 50;
-		      int l = 30;
-                      int p = 60;		
-		      Color bgd = new Color(255,255,255);
-                      Color ol = new Color(0,0,0);
+		      if(getMousePosition() != null){
+		      	int x = getMousePosition().x;
+                        int y = getMousePosition().y;		   
+                      	int w = 50;
+                      	int h = 50;
+		      	int l = 30;
+                      	int p = 60;		
+		      	Color bgd = new Color(255,255,255);
+                     	Color ol = new Color(0,0,0);
 		
-		      if (evt.getKeyChar() == 'r') {
-			Rect r = new Rect(x,y,w,h,ol,bgd);
-                      	figs.add(r);
-		      } else if(evt.getKeyChar() == 'e') {
-			Ellipse e = new Ellipse(x,y,w,h,ol,bgd);
-                      	figs.add(e);
-		      } else if(evt.getKeyChar() == 's') {
-			Seta s = new Seta(x,y,w,h,l,p,ol,bgd);
-                      	figs.add(s);
-		      } else if(evt.getKeyChar() == 't') {
-			Triangle t = new Triangle(x,y,w,h,ol,bgd);
-                      	figs.add(t);
-		      } else if(evt.getKeyCode() == KeyEvent.VK_DELETE) {
-			for(Iterator<Figure> iterator = figs.iterator(); iterator.hasNext();){
-		        	Figure obj = iterator.next();
-				if(obj == focus){
-					iterator.remove();
-				}
-		        }
+		     	 if (evt.getKeyChar() == 'r') {
+				Rect r = new Rect(x,y,w,h,ol,bgd);
+                      		figs.add(r);
+		      	} else if(evt.getKeyChar() == 'e') {
+				Ellipse e = new Ellipse(x,y,w,h,ol,bgd);
+                      		figs.add(e);
+		      	} else if(evt.getKeyChar() == 's') {
+				Seta s = new Seta(x,y,w,h,l,p,ol,bgd);
+                      		figs.add(s);
+		      	} else if(evt.getKeyChar() == 't') {
+				Triangle t = new Triangle(x,y,w,h,ol,bgd);
+                      		figs.add(t);
+		      	} else if(evt.getKeyCode() == KeyEvent.VK_DELETE) {
+				for(Iterator<Figure> iterator = figs.iterator(); iterator.hasNext();){
+		        		Figure obj = iterator.next();
+					if(obj == focus){
+						iterator.remove();
+						focus = null;
+					}
+		        	}
+		      	}
 		      }
-		      else if(evt.getKeyChar() == '+') {
-			if(focus != null){
-				focus.redimension(5);
-			}
+		      if(evt.getKeyChar() == '+') {
+			  if(focus != null){
+				  focus.redimension(5);
+		          }
 		      }
 		      else if(evt.getKeyChar() == '-') {
 			if(focus != null && (focus.w >= 6 && focus.h >= 6)){
@@ -215,5 +223,8 @@ class ProjetoFrame extends JFrame{
         for(Figure fig: this.figs) {
 	    fig.paint(g);	
 	}
+	if(focus!=null){
+		focus.InFocus(g);
+    	}
     }
 }
