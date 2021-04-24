@@ -6,7 +6,9 @@ import java.awt.event.*;
 
 public class Rect extends Figure {
   	
-    Rectangle2D Rect;    
+    Rectangle2D Rect;
+    Rectangle2D foco;
+	    
     
     public Rect (int x, int y, int w, int h, Color ol, Color bgd) {
         this.x = x;
@@ -25,8 +27,8 @@ public class Rect extends Figure {
 	g2d.setColor(this.bgd);
 	g2d.fill(this.Rect);
 	g2d.setColor(this.ol); 
-	g2d.draw(this.Rect); 
-        
+	g2d.draw(this.Rect);
+	       
     }
 	
 
@@ -48,6 +50,13 @@ public class Rect extends Figure {
 	this.w += d;
 	this.h += d;
 	this.Rect = new Rectangle2D.Double(this.x,this.y,this.w,this.h);
+    }
+
+    public void InFocus(Graphics g){
+	Graphics2D focusline = (Graphics2D) g;
+	this.foco = new Rectangle2D.Double(this.x-3,this.y-3,this.w+6,this.h+6);
+	focusline.setColor(Color.red); 
+	focusline.draw(this.foco);	
     }
     
 }
