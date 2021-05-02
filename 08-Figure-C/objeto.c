@@ -49,7 +49,7 @@ typedef struct {
 
 void Triangulo_print (Triangulo* this) {
     Figure* sup = (Figure*) this;
-    printf("Triangulo isosceles de tamanho (%d,%d) na posicao (%d,%d).\n",
+    printf("Triangulo isosceles de base (%d) e altura (%d) na posicao (%d,%d).\n",
            this->w, this->h, sup->x, sup->y);
 }
 
