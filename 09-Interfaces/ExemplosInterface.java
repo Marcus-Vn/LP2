@@ -2,7 +2,7 @@ Pensando em jogos:
 
 "Coletáveis"
 Itens para coletar e usar depois.
-O parâmetro number significa o número de itens coletados e utilizados
+O parâmetro number significa o número de itens coletados e utilizados, pois podem ser quantidades diferentes.
 	
 interface Collectable {
 	void Collect (int number);
