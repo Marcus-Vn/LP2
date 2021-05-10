@@ -39,6 +39,7 @@ class CrystalPoints implements Collectable {
 "Armas"
 O parâmetro damage se refere ao dano e time ao tempo de execução.
 Cada arma teria ataques com animações diferentes, ciclos de ataque diferentes, etc. Mas os métodos seriam similares.
+	//Exemplo: Ataque forte da flecha varia de acordo com o tempo que segurou o botão do mouse (para tiro carregado), espada tem valor fixo para o ataque forte
 Cada uma tem um ataque rápido (mais fraco) e um forte (mais lento).
 
 
