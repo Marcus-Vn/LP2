@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.awt.event.*;
+
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Random;
@@ -10,22 +11,24 @@ import figures.*;
 class EditorApp {
     public static void main (String[] args) {
         ProjetoFrame frame = new ProjetoFrame();
-        frame.setVisible(true);	
+        frame.setVisible(true);
     }
 }
 
 class ProjetoFrame extends JFrame{
-	
+
+    private static final long serialVersionUID = 1L;
     public ArrayList<Figure> figs = new ArrayList<Figure>();
     Iterator<Figure> obj = figs.iterator();
     public Figure focus = null;
     Random rand = new Random();
- 
+  
     int cont = 0;
-    boolean Bview = false;	
+    boolean Bview = false;
+    int index = 0;
 	
     JPopupMenu mudarCor;
-    Point start;	
+    Point start;
 
     public ProjetoFrame () {
         this.addWindowListener (
@@ -49,8 +52,9 @@ class ProjetoFrame extends JFrame{
 				
 			if(SwingUtilities.isLeftMouseButton(evt)){
 				for(Figure fig: figs){
-					if(fig.contains(evt)){
-						focus = fig;					
+					if(fig.clicked(getMousePosition().x, getMousePosition().y)){
+						focus = fig;
+						index = figs.indexOf(fig);
 					}
 				}
 				if(Bview){
@@ -67,8 +71,9 @@ class ProjetoFrame extends JFrame{
 			}
 			if(SwingUtilities.isRightMouseButton(evt)){
 				for(Figure fig: figs){
-					if(fig.contains(evt)){
+					if(fig.clicked(getMousePosition().x,getMousePosition().y)){
 						focus = fig;
+						index = figs.indexOf(fig);
 					}
 				}
 				if(Bview){
@@ -86,7 +91,6 @@ class ProjetoFrame extends JFrame{
 								mudarCor.setVisible(false);
 								Bview = false;
 								cont -= 1;  
-      								JColorChooser color1 = new JColorChooser();
 								Color cor1 = JColorChooser.showDialog(null, "Escolha a Cor",focus.bgd);
 								if(cor1 != null){
 									focus.bgd = cor1;
@@ -103,7 +107,6 @@ class ProjetoFrame extends JFrame{
 								mudarCor.setVisible(false);
 								Bview = false;
 								cont -= 1; 
-      								JColorChooser color2 = new JColorChooser();
 								Color cor2 = JColorChooser.showDialog(null, "Escolha a Cor",focus.ol);
 								if(cor2 != null){
 									focus.ol = cor2;
@@ -151,40 +154,52 @@ class ProjetoFrame extends JFrame{
 	   new KeyAdapter(){
 	      public void keyPressed (KeyEvent evt){
 		      if(getMousePosition() != null){
-		      	int x = getMousePosition().x;
-                        int y = getMousePosition().y;		   
-                      	int w = 50;
-                      	int h = 50;
-		      	int l = 30;
-                      	int p = 60;		
-		      	Color bgd = new Color(255,255,255);
-                     	Color ol = new Color(0,0,0);
+				int x = getMousePosition().x;
+                    		int y = getMousePosition().y;		   
+                    		int w = 50;	
+                    		int h = 50;
+                    		int l = 30;
+                    		int p = 60;		
+                    		Color bgd = new Color(255,255,255);
+                    		Color ol = new Color(0,0,0);
 		
 		     	 if (evt.getKeyChar() == 'r') {
-				Rect r = new Rect(x,y,w,h,ol,bgd);
-                      		figs.add(r);
+		     		 Rect r = new Rect(x,y,w,h,ol,bgd);
+                      	figs.add(r);
 		      	} else if(evt.getKeyChar() == 'e') {
-				Ellipse e = new Ellipse(x,y,w,h,ol,bgd);
-                      		figs.add(e);
+		      		Ellipse e = new Ellipse(x,y,w,h,ol,bgd);
+                      	figs.add(e);
 		      	} else if(evt.getKeyChar() == 's') {
-				Seta s = new Seta(x,y,w,h,l,p,ol,bgd);
-                      		figs.add(s);
+		      		Seta s = new Seta(x,y,w,h,l,p,ol,bgd);
+                      	figs.add(s);
 		      	} else if(evt.getKeyChar() == 't') {
-				Triangle t = new Triangle(x,y,w,h,ol,bgd);
-                      		figs.add(t);
+		      		Triangle t = new Triangle(x,y,w,h,ol,bgd);
+                      	figs.add(t);
 		      	} else if(evt.getKeyCode() == KeyEvent.VK_DELETE) {
-				for(Iterator<Figure> iterator = figs.iterator(); iterator.hasNext();){
+		      		for(Iterator<Figure> iterator = figs.iterator(); iterator.hasNext();){
 		        		Figure obj = iterator.next();
-					if(obj == focus){
-						iterator.remove();
-						focus = null;
-					}
+		        		if(obj == focus){
+		        			iterator.remove();
+		        			focus = null;
+		        		}
 		        	}
 		      	}
 		      }
+		      if(evt.getKeyChar() == 'f') {
+		    		  if(index<figs.size()) {
+		    			  focus = figs.get(index);
+		    			  index++;
+		    		  }
+		    		  else {
+		    			  index = 0;
+		    			  focus = figs.get(index);
+		    			  index++;
+		    		  }
+		      }
+		      
 		      if(evt.getKeyChar() == '+') {
-			  if(focus != null){
-				  focus.redimension(5);
+		    	  if(focus != null){
+		    		  focus.redimension(5);
 		          }
 		      }
 		      else if(evt.getKeyChar() == '-') {
@@ -217,14 +232,18 @@ class ProjetoFrame extends JFrame{
 	   }
 	);
     }
-
-    public void paint (Graphics g) {
+    
+    @Override
+    public void paint(Graphics g) {
         super.paint(g);
-        for(Figure fig: this.figs) {
-	    fig.paint(g);	
-	}
-	if(focus!=null){
-		focus.InFocus(g);
-    	}
+        for(Figure fig: this.figs){
+        	if(fig==focus) {
+        		fig.paint(g, true);	
+        	}
+        	else {
+        		fig.paint(g, false);
+        	}
+        }
     }
 }
+
