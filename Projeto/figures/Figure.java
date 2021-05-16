@@ -1,18 +1,29 @@
 package figures;
 
 import java.awt.*;
-import java.awt.event.*;
+import ivisible.*;
 
-public abstract class Figure {
-    public abstract void paint (Graphics g);
+public abstract class Figure implements IVisible {
     public int x, y;
     public int w, h;
     //background,outline
     public Color bgd, ol;
-
-    public abstract boolean contains(MouseEvent evt);
-    public abstract void drag(int dx, int dy);
-    public abstract void redimension(int d);
-    public abstract void InFocus (Graphics g);
+    public Figure(int x, int y, int w, int h, Color ol, Color bgd) {
+    	this.x = x;
+        this.y = y;
+        this.w = w;
+        this.h = h;
+        this.ol = ol;
+        this.bgd = bgd;    	
+    }
+    public abstract boolean clicked(int x, int y);
+    public void drag (int dx, int dy) {
+    	this.x += dx;
+    	this.y += dy;
+    }
+    public void redimension(int d) {
+    	this.w += d;
+    	this.h += d;
+    }
     
 }
