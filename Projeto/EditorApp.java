@@ -31,13 +31,32 @@ class ProjetoFrame extends JFrame{
     Point start;
 
     public ProjetoFrame () {
+	
+	try {
+	    	FileInputStream f = new FileInputStream("proj.bin");
+	    	ObjectInputStream o = new ObjectInputStream(f);
+	    	this.figs = (ArrayList<Figure>) o.readObject();
+	    	o.close();
+	    	
+	} catch(Exception x) {
+	    System.out.println("ERRO!");
+	}
+		
         this.addWindowListener (
             new WindowAdapter() {
                 public void windowClosing (WindowEvent e) {
-                    System.exit(0);
+                	try {
+                		FileOutputStream f = new FileOutputStream("proj.bin");
+                    		ObjectOutputStream o = new ObjectOutputStream(f);
+                    		o.writeObject(figs);
+                    		o.flush();
+                    		o.close();                                  		
+                	} catch(Exception x) {               		
+                	}                	
+                    	System.exit(0);
                 }
             }
-        );
+        );       
    	
 	this.setTitle("Editor Grafico");
         this.setSize(600, 500);
