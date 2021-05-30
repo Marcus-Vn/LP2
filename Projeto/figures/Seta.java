@@ -1,14 +1,15 @@
 package figures;
 
 import java.awt.*;
-import java.awt.event.*;
 
 public class Seta extends Figure {
 
-    Polygon Seta;
-    Polygon foco;	
+    private static final long serialVersionUID = 1L;
+    private Polygon Seta;
+    private Polygon foco;	
+
     //extensao da ponta
-    int l, p;
+    private int l, p;
 
     public Seta (int x, int y, int w, int h, int l, int p, Color ol, Color bgd) {
     	super(x,y,w,h,ol,bgd);
@@ -33,22 +34,20 @@ public class Seta extends Figure {
         	Graphics2D focusline = (Graphics2D) g;
         	int[] xFocus = { this.x-3, this.x+this.w-3, this.x+this.w-3,this.x+this.w, this.x+this.w+this.p+6, 
         	this.x + this.w,this.x + this.w-3, this.x + this.w-3, this.x-3};
-            	int[] yFocus = { this.y-3, this.y-3, this.y - this.l-6,this.y - this.l-6, this.y + this.h/2,
-            	this.l+this.h+this.y+6,this.l+this.h+this.y+6, this.y + this.h+3, this.y + this.h+3};
-            	this.foco = new Polygon( xFocus, yFocus, 9 );
-            	focusline.setColor(Color.red); 
-            	focusline.draw(this.foco);	
+            int[] yFocus = { this.y-3, this.y-3, this.y - this.l-6,this.y - this.l-6, this.y + this.h/2,
+            this.l+this.h+this.y+6,this.l+this.h+this.y+6, this.y + this.h+3, this.y + this.h+3};
+            this.foco = new Polygon( xFocus, yFocus, 9 );
+            focusline.setColor(Color.red); 
+            focusline.draw(this.foco);	
         }
         
-    }
-	
+    }	
     public boolean clicked(int x, int y) {
-        if (this.Seta.contains(x,y)){
-            	return true;
-	}
-	else{ return false;}
-    }
-
+        if (this.Seta != null){
+        	return this.Seta.contains(x,y);
+        }
+        return false;
+    } 
     public void redimension(int d) {
     	this.w += d;
     	this.h += d;
@@ -60,6 +59,6 @@ public class Seta extends Figure {
     	}else{
     		this.p += d;
     		this.l += d;
-    	}    	
+    	}
     }   
 }
