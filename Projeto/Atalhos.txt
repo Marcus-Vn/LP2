@@ -4,6 +4,7 @@ Atalhos do teclado:
 "e" - Elipse
 "t" - Triângulo
 "s" - Seta
+"f" - Mudar foco entre figuras
 "del" - Deletar figura em foco
 "+" - Aumentar o tamanho
 "-" - Diminuir o tamanho
