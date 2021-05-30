@@ -26,6 +26,5 @@ public abstract class Figure implements IVisible, Serializable {
     public void redimension(int d) {
     	this.w += d;
     	this.h += d;
-    }
-    
+    } 
 }
