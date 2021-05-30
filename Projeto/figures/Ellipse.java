@@ -2,12 +2,11 @@ package figures;
 
 import java.awt.*;
 import java.awt.geom.*;
-import java.awt.event.*;
 
 public class Ellipse extends Figure{
-
-    Ellipse2D Ellipse;
-    Ellipse2D foco;
+    private static final long serialVersionUID = 1L;
+    private Ellipse2D Ellipse;
+    private Ellipse2D foco;
 
     public Ellipse (int x, int y, int w, int h, Color ol, Color bgd) {
         super(x,y,w,h,ol,bgd);
@@ -30,9 +29,9 @@ public class Ellipse extends Figure{
     }
     
     public boolean clicked(int x, int y) {
-        if (this.Ellipse.contains(x,y)){
-            	return true;
-	}
-	else{ return false;}
-    } 
+        if (this.Ellipse != null){
+        	return this.Ellipse.contains(x,y);
+        }
+        return false;
+    }    
 }
