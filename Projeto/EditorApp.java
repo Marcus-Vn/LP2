@@ -3,8 +3,8 @@ import java.awt.event.*;
 
 import javax.swing.*;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.Iterator;
+import java.io.*;
 
 import figures.*;
 
@@ -16,60 +16,108 @@ class EditorApp {
 }
 
 class ProjetoFrame extends JFrame{
-
     private static final long serialVersionUID = 1L;
-    public ArrayList<Figure> figs = new ArrayList<Figure>();
-    Iterator<Figure> obj = figs.iterator();
-    public Figure focus = null;
-    Random rand = new Random();
+    private ArrayList<Figure> figs = new ArrayList<Figure>();
+    private ArrayList<Button> buts = new ArrayList<Button>();
+    
+    private Figure focus = null;
+    private Button butfocus = null;
+    //Tamanho inicial das figuras	   
+    private int w = 50;
+    private int h = 50;
+    private int l = 30;
+    private int p = 60;		
+    private Color bgd = new Color(255,255,255);
+    private Color ol = new Color(0,0,0);
   
-    int cont = 0;
-    boolean Bview = false;
-    int index = 0;
+    private int cont = 0;
+    private boolean Bview = false;
+    private int index = 0;
 	
-    JPopupMenu mudarCor;
-    Point start;
+    private JPopupMenu mudarCor;
+    private Point start;
 
-    public ProjetoFrame () {
-	
-	try {
+	@SuppressWarnings("unchecked")
+	public ProjetoFrame () {
+		try {
 	    	FileInputStream f = new FileInputStream("proj.bin");
 	    	ObjectInputStream o = new ObjectInputStream(f);
 	    	this.figs = (ArrayList<Figure>) o.readObject();
 	    	o.close();
 	    	
-	} catch(Exception x) {
-	    System.out.println("ERRO!");
-	}
+	    } catch(Exception x) {
+	    	System.out.println("ERRO!");
+	    }
 		
         this.addWindowListener (
             new WindowAdapter() {
                 public void windowClosing (WindowEvent e) {
                 	try {
                 		FileOutputStream f = new FileOutputStream("proj.bin");
-                    		ObjectOutputStream o = new ObjectOutputStream(f);
-                    		o.writeObject(figs);
-                    		o.flush();
-                    		o.close();                                  		
+                    	ObjectOutputStream o = new ObjectOutputStream(f);
+                    	o.writeObject(figs);
+                    	o.flush();
+                    	o.close();                                  		
                 	} catch(Exception x) {               		
                 	}                	
-                    	System.exit(0);
+                    System.exit(0);
                 }
             }
-        );       
-   	
+        );
+                
 	this.setTitle("Editor Grafico");
-        this.setSize(600, 500);
+    	this.setSize(600, 500);
+    
+    	buts.add(new Button(0, new Rect(0,0,0,0,Color.black,Color.white)));
+   	buts.add(new Button(1, new Ellipse(0,0,0,0,Color.black,Color.white)));
+   	buts.add(new Button(2, new Triangle(0,0,0,0,Color.black,Color.white)));
+    	buts.add(new Button(3, new Seta(0,0,0,0,5,10,Color.black,Color.white)));
     
 	this.addMouseListener(new MouseAdapter(){
+		public void mouseClicked (MouseEvent evt){
+			butfocus = null;
+			if(getMousePosition() == null){
+				return;
+			}
+			for(Button but: buts){
+	        	if(but.clicked(getMousePosition().x, getMousePosition().y)) {
+	        		butfocus = but;
+	        	}
+	        }
+			repaint();
+		}
 		public void mousePressed (MouseEvent evt){
 			start = evt.getPoint();
 			focus = null;
 			if(getMousePosition() == null){
 				return;
-			}
-				
+			}			
 			if(SwingUtilities.isLeftMouseButton(evt)){
+				if(getMousePosition()!= null && butfocus!=null) {
+					int x = getMousePosition().x;
+				    	int y = getMousePosition().y;	
+					if(butfocus.idx == 0) {
+						Rect r = new Rect(x,y,w,h,ol,bgd);
+	                    			figs.add(r);
+	                    			focus = r;
+					}
+					else if(butfocus.idx == 1) {
+						Ellipse e = new Ellipse(x,y,w,h,ol,bgd);
+	                    			figs.add(e);
+	                    			focus = e;
+					}
+					else if(butfocus.idx == 2) {
+						Triangle t = new Triangle(x,y,w,h,ol,bgd);
+	                    			figs.add(t);
+	                    			focus = t;
+					}
+					else if(butfocus.idx == 3) {
+						Seta s = new Seta(x,y,w,h,l,p,ol,bgd);
+	                    			figs.add(s);
+	                    			focus = s;
+					}
+					butfocus = null;
+				}
 				for(Figure fig: figs){
 					if(fig.clicked(getMousePosition().x, getMousePosition().y)){
 						focus = fig;
@@ -138,7 +186,7 @@ class ProjetoFrame extends JFrame{
 					mudarCor.add(fundoC);
 					mudarCor.add(contornoC);
 					if(cont == 0){
-						mudarCor.show(null, evt.getX(), evt.getY());
+						mudarCor.show(null, getMousePosition().x, getMousePosition().y);
 						cont += 1;
 						Bview = true;
 					}
@@ -149,8 +197,7 @@ class ProjetoFrame extends JFrame{
 					mudarCor.setVisible(false);
 					Bview = false;
 					cont -= 1;
-			}
-				
+			}	
 		}
 	});
 
@@ -163,9 +210,7 @@ class ProjetoFrame extends JFrame{
 					start = Atual;
 					repaint();
 				}
-			}
-			
-		
+			}					
 		}
 	});
 
@@ -173,27 +218,24 @@ class ProjetoFrame extends JFrame{
 	   new KeyAdapter(){
 	      public void keyPressed (KeyEvent evt){
 		      if(getMousePosition() != null){
-				int x = getMousePosition().x;
-                    		int y = getMousePosition().y;		   
-                    		int w = 50;	
-                    		int h = 50;
-                    		int l = 30;
-                    		int p = 60;		
-                    		Color bgd = new Color(255,255,255);
-                    		Color ol = new Color(0,0,0);
-		
-		     	 if (evt.getKeyChar() == 'r') {
-		     		 Rect r = new Rect(x,y,w,h,ol,bgd);
-                      	figs.add(r);
+		        int x = getMousePosition().x;
+		    	int y = getMousePosition().y;	  
+		     	if (evt.getKeyChar() == 'r') {
+		     		Rect r = new Rect(x,y,w,h,ol,bgd);
+                     		figs.add(r);
+                     		focus = r;
 		      	} else if(evt.getKeyChar() == 'e') {
 		      		Ellipse e = new Ellipse(x,y,w,h,ol,bgd);
-                      	figs.add(e);
+                    		figs.add(e);
+                    		focus = e;
 		      	} else if(evt.getKeyChar() == 's') {
 		      		Seta s = new Seta(x,y,w,h,l,p,ol,bgd);
-                      	figs.add(s);
+                    		figs.add(s);
+                    		focus = s;
 		      	} else if(evt.getKeyChar() == 't') {
 		      		Triangle t = new Triangle(x,y,w,h,ol,bgd);
-                      	figs.add(t);
+                    		figs.add(t);
+                    		focus = t;
 		      	} else if(evt.getKeyCode() == KeyEvent.VK_DELETE) {
 		      		for(Iterator<Figure> iterator = figs.iterator(); iterator.hasNext();){
 		        		Figure obj = iterator.next();
@@ -204,7 +246,7 @@ class ProjetoFrame extends JFrame{
 		        	}
 		      	}
 		      }
-		      if(evt.getKeyChar() == 'f') {
+		      if(evt.getKeyChar() == 'f' && figs.size()!=0) {
 		    		  if(index<figs.size()) {
 		    			  focus = figs.get(index);
 		    			  index++;
@@ -249,20 +291,29 @@ class ProjetoFrame extends JFrame{
                       repaint();
 	      }
 	   }
-	);
-    }
-    
-    @Override
-    public void paint(Graphics g) {
-        super.paint(g);
-        for(Figure fig: this.figs){
-        	if(fig==focus) {
+	);}
+
+	@Override
+    	public void paint(Graphics g) {
+        	super.paint(g);
+        	for(Figure fig: this.figs){
+        	if(fig == focus) {
         		fig.paint(g, true);	
         	}
         	else {
         		fig.paint(g, false);
         	}
-        }
-    }
+        	}
+        	for(Button but: this.buts){
+        		if(but == butfocus) {
+        			but.paint(g, true);	
+        		}
+        		else {
+        			but.paint(g, false);
+        		}
+        	}
+    	}
 }
+
+
 
