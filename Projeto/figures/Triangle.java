@@ -2,12 +2,12 @@ package figures;
 
 import java.awt.*;
 import java.awt.Polygon;
-import java.awt.event.*;
 
 public class Triangle extends Figure {
 
-    Polygon Triangle;
-    Polygon foco;
+    private static final long serialVersionUID = 1L;
+    private Polygon Triangle;
+    private Polygon foco;
 	
     public Triangle(int x, int y, int w, int h ,Color ol,Color bgd) {
     	super(x,y,w,h,ol,bgd);
@@ -35,9 +35,10 @@ public class Triangle extends Figure {
     }
 	
     public boolean clicked(int x, int y) {
-        if (this.Triangle.contains(x,y)){
-            	return true;
-	}
-	else{ return false;}
+    	if (this.Triangle != null){
+    		return this.Triangle.contains(x,y);
+    	}
+    	return false;
     }
+
 }
