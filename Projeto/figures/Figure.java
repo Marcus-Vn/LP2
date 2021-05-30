@@ -5,6 +5,7 @@ import ivisible.*;
 import java.io.Serializable;
 
 public abstract class Figure implements IVisible, Serializable {
+    private static final long serialVersionUID = 1L;
     public int x, y;
     public int w, h;
     //background,outline
