@@ -2,14 +2,12 @@ package figures;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
-import java.awt.event.*;
 
 public class Rect extends Figure {
-  	
-    Rectangle2D Rect;
-    Rectangle2D foco;
+    private static final long serialVersionUID = 1L;
+    private Rectangle2D Rect;
+    private Rectangle2D foco;
 	    
-    
     public Rect(int x, int y, int w, int h, Color ol, Color bgd) {
     	super(x,y,w,h,ol,bgd);
     }
@@ -31,10 +29,9 @@ public class Rect extends Figure {
     }
 	
     public boolean clicked(int x, int y) {
-        if (this.Rect.contains(x,y)){
-            	return true;
-	}
-	else{ return false;}
-    }
-    
+        if (this.Rect != null){
+        	return this.Rect.contains(x,y);
+        }
+        return false;
+    } 
 }
